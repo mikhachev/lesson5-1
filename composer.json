@@ -1,0 +1,14 @@
+{
+    "name": "mikhachev/lesson51",
+    "description": "-",
+    "authors": [
+        {
+            "name": "Evgeny Mikhachev",
+            "email": "ev.mikhachev@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "yandex/geo": "^1.1"
+    }
+}
