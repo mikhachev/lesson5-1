@@ -46,9 +46,7 @@ foreach ($collection as $item)
 <head>
   <title>Работа с Composer</title>
   <meta charset="utf-8">
-  <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
-  <script src="https://yandex.st/jquery/2.2.3/jquery.min.js" type="text/javascript"></script>
-   
+  <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script> 
 </head>
 <body>
   <h1>Composer</h1><br>
@@ -84,7 +82,7 @@ foreach ($collection as $item)
 if (count($collection) == 1)
 {
 ?>    
-  <div id="map" style="width: 600px; height: 400px"></div>
+  
   <script type="text/javascript">
     ymaps.ready(init);
     var myMap,
@@ -92,22 +90,26 @@ if (count($collection) == 1)
 
     function init(){     
         myMap = new ymaps.Map("map", {
-            center: [<?= $latitude[$i]; ?>, <?= $longitude[$i]; ?>],
+            center: [<?= $latitude[0]; ?>, <?= $longitude[0]; ?>],
             zoom: 10
         });
 
-        myPlacemark = new ymaps.Placemark([<?= $latitude[$i]; ?>, <?= $longitude[$i]; ?>], { 
-            hintContent: '<?= $address[$i]; ?>', 
-            balloonContent: '<?= $address[$i]; ?>' 
+        myPlacemark = new ymaps.Placemark([<?= $latitude[0]; ?>, <?= $longitude[0]; ?>], { 
+            hintContent: '<?= $address[0]; ?>', 
+            balloonContent: '<?= $address[0]; ?>' 
         });
 
         myMap.geoObjects.add(myPlacemark);
     }
   </script>
 
-<?php   
+
+<?php 
 }
 ?>
+ 
+<div id="map" style="width: 600px; height: 400px"></div>
+
 </body>
 </html>
 
