@@ -3,12 +3,21 @@
 require __DIR__ . '/vendor/autoload.php';
 
 $api = new \Yandex\Geo\Api();
-
-
- if (!isset($_GET["addr"]))
+$enum = 7;
+$enum = (isset($_GET["enum"])?"1" : "7");
+if (!isset($_GET["addr"]))
 {
-  	$yousearch = "Простоквашино";
-  	$api->setQuery("Простоквашино");
+  	if (isset($_GET["longitude"]) && isset($_GET["latitude"]))
+  	/*{
+	    $api->setPoint($_GET["longitude"], $_GET["latitude"]);	
+	    
+	}else*/
+	{
+	    $yousearch = "Простоквашино";
+  	    $api->setQuery("Простоквашино");
+     	
+	}
+  	
 }else
 {
     $yousearch =$_GET["addr"];	
@@ -18,7 +27,7 @@ $api = new \Yandex\Geo\Api();
 
 // Настройка фильтров
 $api
-    ->setLimit(7) // кол-во результатов
+    ->setLimit($enum) // кол-во результатов
     ->setLang(\Yandex\Geo\Api::LANG_US) // локаль ответа
     ->load();
 
@@ -65,10 +74,11 @@ foreach ($collection as $item)
 <?php
 $i = 0;
 foreach ($collection as $item)
-{  			  
+{
+//$coords = "?longitude=$longitude[$i]&latitude=$latitude[$i]";	  			  
 ?>
   <tr>
-    <td><a href="<?= '?addr='.$address[$i] ?>  "> <?= $address[$i] ?> </a></td>
+    <td><a href="<?= '?addr='.$address[$i]."&enum=1" ?>  "> <?= $address[$i] ?> </a></td>
     <td>Широта:<?= $latitude[$i]; ?>, Долгота: <?= $longitude[$i]; ?> </td>            
   </tr>                     
         
