@@ -1,42 +1,32 @@
 <?php
-
 require __DIR__ . '/vendor/autoload.php';
-
 $api = new \Yandex\Geo\Api();
-$enum = 7;
-$enum = (isset($_GET["enum"])?"1" : "7");
-if (!isset($_GET["addr"]))
-{
-  	if (isset($_GET["longitude"]) && isset($_GET["latitude"]))
-  	/*{
-	    $api->setPoint($_GET["longitude"], $_GET["latitude"]);	
-	    
-	}else*/
-	{
-	    $yousearch = "Простоквашино";
-  	    $api->setQuery("Простоквашино");
-     	
-	}
-  	
-}else
-{
+ if (!isset($_GET["addr"])) {
+  	$yousearch = "Простоквашино";
+  	$api->setQuery("Простоквашино");
+} else {
     $yousearch =$_GET["addr"];	
- $api->setQuery($_GET["addr"]);
+    $api->setQuery($_GET["addr"]);
 }
 
-
+function yourCoords($latitude, $longitude)
+{
+	global $lat;
+	global $long;
+	
+	$lat = $latitude;
+	$long = $longitude;
+}
 // Настройка фильтров
 $api
-    ->setLimit($enum) // кол-во результатов
+    ->setLimit(7) // кол-во результатов
     ->setLang(\Yandex\Geo\Api::LANG_US) // локаль ответа
     ->load();
-
 $response = $api->getResponse();
 $response->getFoundCount(); // кол-во найденных адресов
 $response->getQuery(); // исходный запрос
 $response->getLatitude(); // широта для исходного запроса
 $response->getLongitude(); // долгота для исходного запроса
-
 // Список найденных точек
 $collection = $response->getList();
 $i = 0;
@@ -73,12 +63,11 @@ foreach ($collection as $item)
   </tr>
 <?php
 $i = 0;
-foreach ($collection as $item)
-{
-//$coords = "?longitude=$longitude[$i]&latitude=$latitude[$i]";	  			  
+
+foreach ($collection as $item) {  			  
 ?>
   <tr>
-    <td><a href="<?= '?addr='.$address[$i]."&enum=1" ?>  "> <?= $address[$i] ?> </a></td>
+    <td><a href="<?= '?addr='.$yousearch."&enum=$i" ?>  "> <?= $address[$i] ?> </a></td>
     <td>Широта:<?= $latitude[$i]; ?>, Долгота: <?= $longitude[$i]; ?> </td>            
   </tr>                     
         
@@ -86,41 +75,42 @@ foreach ($collection as $item)
     $i++;
 } ?>
   </table>
+  
+  
 
 <?php   
 
-if (count($collection) == 1)
-{
+if (count($collection) == 1 ) {
+    yourCoords($latitude[0], $longitude[0]);
+} elseif (isset($_GET["enum"])) {
+	yourCoords($latitude[$_GET["enum"]], $longitude[$_GET["enum"]]);
+}	 
 ?>    
   
   <script type="text/javascript">
     ymaps.ready(init);
     var myMap,
         myPlacemark;
-
     function init(){     
         myMap = new ymaps.Map("map", {
-            center: [<?= $latitude[0]; ?>, <?= $longitude[0]; ?>],
+            center: [<?= $lat; ?>, <?= $long; ?>],
             zoom: 10
         });
-
-        myPlacemark = new ymaps.Placemark([<?= $latitude[0]; ?>, <?= $longitude[0]; ?>], { 
+        myPlacemark = new ymaps.Placemark([<?= $lat; ?>, <?= $long; ?>], { 
             hintContent: '<?= $address[0]; ?>', 
             balloonContent: '<?= $address[0]; ?>' 
         });
-
         myMap.geoObjects.add(myPlacemark);
     }
   </script>
 
 
 <?php 
-}
+
 ?>
  
 <div id="map" style="width: 600px; height: 400px"></div>
 
 </body>
 </html>
-
 
