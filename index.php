@@ -104,11 +104,6 @@ if (count($collection) == 1 ) {
     }
   </script>
 
-
-<?php 
-
-?>
- 
 <div id="map" style="width: 600px; height: 400px"></div>
 
 </body>
